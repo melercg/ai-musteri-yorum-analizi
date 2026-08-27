@@ -1,0 +1,13 @@
+# API katmani
+fastapi==0.141.1
+uvicorn==0.52.4
+pydantic==2.13.4
+
+# Gemini
+google-genai==2.18.1
+
+# Veritabani
+psycopg2-binary==2.9.12
+
+# Ortam degiskenleri
+python-dotenv==1.2.3

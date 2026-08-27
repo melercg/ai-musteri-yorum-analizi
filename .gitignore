@@ -1,0 +1,23 @@
+# Python sanal ortamı 
+venv/
+.venv/
+
+# Gizli anahtarlar
+.env
+
+# Python önbellek dosyları
+__pycache__/
+*.pyc
+
+# VS Code ayarları
+.vscode/
+
+# İşletim sistemi çöpleri
+.DS_Store
+Thumbs.db
+
+# Veri seti
+data/
+
+# Kisisel calisma notu, repoya girmez
+DEVAM.md
