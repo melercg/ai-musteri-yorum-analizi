@@ -26,17 +26,16 @@ Sistem şu an uçtan uca çalışıyor: `tarayıcı → FastAPI → Gemini → P
 ## Mimari
 
 ```
-  İstemci
-   │  POST /analysis  {"comment": "..."}
-   ▼
-  FastAPI (app/main.py)        → istek doğrulama (Pydantic)
-   ▼
-  analysis_service.py          → iş akışı: analiz et + kaydet
-   ├──► gemini_service.py      → prompt kur, Gemini'yi çağır, JSON'a çevir
-   └──► database.py            → psycopg2 ile INSERT
-   ▼
-  PostgreSQL (analyses tablosu)
-
+İstemci
+ │  POST /analysis  {"comment": "..."}
+ ▼
+FastAPI (app/main.py)        → istek doğrulama (Pydantic)
+ ▼
+analysis_service.py          → iş akışı: analiz et + kaydet
+ ├──► gemini_service.py      → prompt kur, Gemini'yi çağır, JSON'a çevir
+ └──► database.py            → psycopg2 ile INSERT
+ ▼
+PostgreSQL (analyses tablosu)
 ```
 
 | Katman | Teknoloji |
@@ -75,8 +74,14 @@ Ortam değişkenlerini ayarla:
 
 ```bash
 cp backend/.env.example backend/.env
-# backend/.env dosyasını açıp GEMINI_API_KEY değerini kendi anahtarınla değiştir
 ```
+
+Ardından `backend/.env` dosyasını bir editörde açıp iki değeri doldur:
+
+| Değişken | Ne yazılacak |
+|---|---|
+| `GEMINI_API_KEY` | [Google AI Studio](https://aistudio.google.com/apikey)'dan alınan anahtar |
+| `DATABASE_URL` | Örnekteki `postgresql:///yorum_analizi` yerel kurulumda (peer auth) çalışır. Postgres'in şifre istiyorsa: `postgresql://kullanici:sifre@localhost:5432/yorum_analizi` |
 
 Çalıştır:
 
@@ -98,16 +103,23 @@ uvicorn app.main:app --reload
 | `GET` | `/analysis/stats` | Duygu dağılımı ve toplam sayı |
 
 **Örnek istek**
-curl -X POST http://127.0.0.1:8000/analysis \
- -H "Content-Type: application/json" \
- -d '{"comment": "kargo çok geç geldi berbat"}'
 
+```bash
+curl -X POST http://127.0.0.1:8000/analysis \
+  -H "Content-Type: application/json" \
+  -d '{"comment": "kargo çok geç geldi berbat"}'
+```
+
+**Örnek cevap**
+
+```json
 {
- "sentiment": "negatif",
- "confidence": 0.98,
- "explanation": "Yorumda kargo gecikmesinden şikayet ediliyor ve 'berbat' ifadesi kullanılıyor.",
- "id": 5
+  "sentiment": "negatif",
+  "confidence": 0.98,
+  "explanation": "Yorumda kargo gecikmesinden şikayet ediliyor ve 'berbat' ifadesi kullanılıyor.",
+  "id": 5
 }
+```
 
 
 
